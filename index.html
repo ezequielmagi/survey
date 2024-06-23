@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encuesta</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .question label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .result {
+            display: none;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Encuesta</h1>
+    <form id="surveyForm">
+        <div class="question">
+            <label>1. ¿Cuál es tu color favorito?</label>
+            <input type="radio" name="q1" value="Rojo"> Rojo<br>
+            <input type="radio" name="q1" value="Azul"> Azul<br>
+            <input type="radio" name="q1" value="Verde"> Verde<br>
+            <input type="radio" name="q1" value="Amarillo"> Amarillo
+        </div>
+
+        <div class="question">
+            <label>2. ¿Cuál es tu comida favorita?</label>
+            <input type="radio" name="q2" value="Pizza"> Pizza<br>
+            <input type="radio" name="q2" value="Hamburguesa"> Hamburguesa<br>
+            <input type="radio" name="q2" value="Sushi"> Sushi<br>
+            <input type="radio" name="q2" value="Pasta"> Pasta
+        </div>
+
+        <div class="question">
+            <label>3. ¿Cuál es tu estación del año preferida?</label>
+            <input type="radio" name="q3" value="Primavera"> Primavera<br>
+            <input type="radio" name="q3" value="Verano"> Verano<br>
+            <input type="radio" name="q3" value="Otoño"> Otoño<br>
+            <input type="radio" name="q3" value="Invierno"> Invierno
+        </div>
+
+        <div class="question">
+            <label>4. ¿Cuál es tu animal favorito?</label>
+            <input type="radio" name="q4" value="Perro"> Perro<br>
+            <input type="radio" name="q4" value="Gato"> Gato<br>
+            <input type="radio" name="q4" value="Pájaro"> Pájaro<br>
+            <input type="radio" name="q4" value="Pez"> Pez
+        </div>
+
+        <div class="question">
+            <label>5. ¿Cuál es tu deporte favorito?</label>
+            <input type="radio" name="q5" value="Fútbol"> Fútbol<br>
+            <input type="radio" name="q5" value="Baloncesto"> Baloncesto<br>
+            <input type="radio" name="q5" value="Tenis"> Tenis<br>
+            <input type="radio" name="q5" value="Natación"> Natación
+        </div>
+
+        <button type="button" onclick="submitSurvey()">Enviar</button>
+    </form>
+
+    <div id="results" class="result">
+        <h2>Resultados de la encuesta</h2>
+        <p id="resultQ1"></p>
+        <p id="resultQ2"></p>
+        <p id="resultQ3"></p>
+        <p id="resultQ4"></p>
+        <p id="resultQ5"></p>
+    </div>
+
+    <script>
+        function submitSurvey() {
+            var surveyForm = document.getElementById('surveyForm');
+            var resultsDiv = document.getElementById('results');
+            var resultQ1 = document.getElementById('resultQ1');
+            var resultQ2 = document.getElementById('resultQ2');
+            var resultQ3 = document.getElementById('resultQ3');
+            var resultQ4 = document.getElementById('resultQ4');
+            var resultQ5 = document.getElementById('resultQ5');
+
+            var q1 = surveyForm.q1.value;
+            var q2 = surveyForm.q2.value;
+            var q3 = surveyForm.q3.value;
+            var q4 = surveyForm.q4.value;
+            var q5 = surveyForm.q5.value;
+
+            if (!q1 || !q2 || !q3 || !q4 || !q5) {
+                alert("Por favor, responde todas las preguntas.");
+                return;
+            }
+
+            resultQ1.innerHTML = "1. ¿Cuál es tu color favorito? " + q1;
+            resultQ2.innerHTML = "2. ¿Cuál es tu comida favorita? " + q2;
+            resultQ3.innerHTML = "3. ¿Cuál es tu estación del año preferida? " + q3;
+            resultQ4.innerHTML = "4. ¿Cuál es tu animal favorito? " + q4;
+            resultQ5.innerHTML = "5. ¿Cuál es tu deporte favorito? " + q5;
+
+            resultsDiv.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
