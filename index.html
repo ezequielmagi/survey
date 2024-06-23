@@ -103,7 +103,7 @@
             <input type="radio" name="q5" value="Natación"> Natación<br>
             <div class="controls">
                 <button onclick="previousQuestion(5)">Anterior</button>
-                <button onclick="nextQuestion(5)">Finalizar</button>
+                <button onclick="finishSurvey()">Finalizar</button>
             </div>
         </div>
         
@@ -114,7 +114,8 @@
             <p id="resultQ3"></p>
             <p id="resultQ4"></p>
             <p id="resultQ5"></p>
-            <button onclick="resetSurvey()">Reiniciar</button>
+            <button onclick="saveResults()">Guardar Resultados</button>
+            <button onclick="logout()">Desloguear</button>
         </div>
     </div>
 
@@ -137,6 +138,7 @@
             const user = users.find(u => u.username === username && u.password === password);
 
             if (user) {
+                localStorage.setItem('loggedInUser', username);
                 document.getElementById('login').classList.remove('active');
                 document.getElementById('question1').classList.add('active');
                 document.getElementById('survey').style.display = 'block';
@@ -193,11 +195,29 @@
             document.getElementById('resultQ5').innerText = "5. ¿Cuál es tu deporte favorito? " + localStorage.getItem('q5');
         }
 
-        function resetSurvey() {
+        function saveResults() {
+            const username = localStorage.getItem('loggedInUser');
+            const results = {
+                q1: localStorage.getItem('q1'),
+                q2: localStorage.getItem('q2'),
+                q3: localStorage.getItem('q3'),
+                q4: localStorage.getItem('q4'),
+                q5: localStorage.getItem('q5')
+            };
+            localStorage.setItem(username + '_surveyResults', JSON.stringify(results));
+            alert('Resultados guardados.');
+        }
+
+        function logout() {
             localStorage.clear();
             document.getElementById('results').classList.remove('active');
-            document.getElementById('question1').classList.add('active');
-            updateProgress(1);
+            document.getElementById('login').classList.add('active');
+            document.getElementById('survey').style.display = 'none';
+        }
+
+        function finishSurvey() {
+            saveResults();
+            logout();
         }
     </script>
 </body>
