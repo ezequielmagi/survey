@@ -9,102 +9,250 @@
             font-family: Arial, sans-serif;
             margin: 20px;
         }
-        .question {
+        .login, .question, .result, .users {
+            display: none;
+        }
+        .login.active, .question.active, .result.active, .users.active {
+            display: block;
+        }
+        .progress {
             margin-bottom: 20px;
         }
-        .question label {
-            display: block;
-            margin-bottom: 5px;
+        .progress span {
+            font-weight: bold;
         }
-        .result {
-            display: none;
+        .controls {
+            display: flex;
+            justify-content: space-between;
             margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <h1>Encuesta</h1>
-    <form id="surveyForm">
-        <div class="question">
-            <label>1. ¿Cuál es tu color favorito?</label>
+    <div id="login" class="login active">
+        <h1>Iniciar Sesión</h1>
+        <label for="username">Usuario:</label>
+        <input type="text" id="username" required><br>
+        <label for="password">Contraseña:</label>
+        <input type="password" id="password" required><br>
+        <button onclick="login()">Ingresar</button>
+        <button onclick="showUsers()">Ver Usuarios</button>
+    </div>
+    
+    <div id="survey">
+        <h1>Encuesta</h1>
+        <div class="progress">
+            Pregunta <span id="currentQuestion">1</span> de 5
+        </div>
+        
+        <div id="question1" class="question">
+            <label>1. ¿Cuál es tu color favorito?</label><br>
             <input type="radio" name="q1" value="Rojo"> Rojo<br>
             <input type="radio" name="q1" value="Azul"> Azul<br>
             <input type="radio" name="q1" value="Verde"> Verde<br>
-            <input type="radio" name="q1" value="Amarillo"> Amarillo
+            <input type="radio" name="q1" value="Amarillo"> Amarillo<br>
+            <div class="controls">
+                <button onclick="nextQuestion(1)">Siguiente</button>
+            </div>
         </div>
-
-        <div class="question">
-            <label>2. ¿Cuál es tu comida favorita?</label>
+        
+        <div id="question2" class="question">
+            <label>2. ¿Cuál es tu comida favorita?</label><br>
             <input type="radio" name="q2" value="Pizza"> Pizza<br>
             <input type="radio" name="q2" value="Hamburguesa"> Hamburguesa<br>
             <input type="radio" name="q2" value="Sushi"> Sushi<br>
-            <input type="radio" name="q2" value="Pasta"> Pasta
+            <input type="radio" name="q2" value="Pasta"> Pasta<br>
+            <div class="controls">
+                <button onclick="previousQuestion(2)">Anterior</button>
+                <button onclick="nextQuestion(2)">Siguiente</button>
+            </div>
         </div>
-
-        <div class="question">
-            <label>3. ¿Cuál es tu estación del año preferida?</label>
+        
+        <div id="question3" class="question">
+            <label>3. ¿Cuál es tu estación del año preferida?</label><br>
             <input type="radio" name="q3" value="Primavera"> Primavera<br>
             <input type="radio" name="q3" value="Verano"> Verano<br>
             <input type="radio" name="q3" value="Otoño"> Otoño<br>
-            <input type="radio" name="q3" value="Invierno"> Invierno
+            <input type="radio" name="q3" value="Invierno"> Invierno<br>
+            <div class="controls">
+                <button onclick="previousQuestion(3)">Anterior</button>
+                <button onclick="nextQuestion(3)">Siguiente</button>
+            </div>
         </div>
-
-        <div class="question">
-            <label>4. ¿Cuál es tu animal favorito?</label>
+        
+        <div id="question4" class="question">
+            <label>4. ¿Cuál es tu animal favorito?</label><br>
             <input type="radio" name="q4" value="Perro"> Perro<br>
             <input type="radio" name="q4" value="Gato"> Gato<br>
             <input type="radio" name="q4" value="Pájaro"> Pájaro<br>
-            <input type="radio" name="q4" value="Pez"> Pez
+            <input type="radio" name="q4" value="Pez"> Pez<br>
+            <div class="controls">
+                <button onclick="previousQuestion(4)">Anterior</button>
+                <button onclick="nextQuestion(4)">Siguiente</button>
+            </div>
         </div>
-
-        <div class="question">
-            <label>5. ¿Cuál es tu deporte favorito?</label>
+        
+        <div id="question5" class="question">
+            <label>5. ¿Cuál es tu deporte favorito?</label><br>
             <input type="radio" name="q5" value="Fútbol"> Fútbol<br>
             <input type="radio" name="q5" value="Baloncesto"> Baloncesto<br>
             <input type="radio" name="q5" value="Tenis"> Tenis<br>
-            <input type="radio" name="q5" value="Natación"> Natación
+            <input type="radio" name="q5" value="Natación"> Natación<br>
+            <div class="controls">
+                <button onclick="previousQuestion(5)">Anterior</button>
+                <button onclick="finishSurvey()">Finalizar</button>
+            </div>
         </div>
+        
+        <div id="results" class="result">
+            <h2>Resultados de la encuesta</h2>
+            <p id="resultQ1"></p>
+            <p id="resultQ2"></p>
+            <p id="resultQ3"></p>
+            <p id="resultQ4"></p>
+            <p id="resultQ5"></p>
+            <button onclick="saveResults()">Guardar Resultados</button>
+            <button onclick="logout()">Desloguear</button>
+        </div>
+    </div>
 
-        <button type="button" onclick="submitSurvey()">Enviar</button>
-    </form>
-
-    <div id="results" class="result">
-        <h2>Resultados de la encuesta</h2>
-        <p id="resultQ1"></p>
-        <p id="resultQ2"></p>
-        <p id="resultQ3"></p>
-        <p id="resultQ4"></p>
-        <p id="resultQ5"></p>
+    <div id="users" class="users">
+        <h1>Usuarios y Respuestas</h1>
+        <div id="userList"></div>
+        <button onclick="backToLogin()">Volver</button>
     </div>
 
     <script>
-        function submitSurvey() {
-            var surveyForm = document.getElementById('surveyForm');
-            var resultsDiv = document.getElementById('results');
-            var resultQ1 = document.getElementById('resultQ1');
-            var resultQ2 = document.getElementById('resultQ2');
-            var resultQ3 = document.getElementById('resultQ3');
-            var resultQ4 = document.getElementById('resultQ4');
-            var resultQ5 = document.getElementById('resultQ5');
+        const users = [
+            {
+                username: 'user1',
+                password: 'password1'
+            },
+            {
+                username: 'user2',
+                password: 'password2'
+            }
+        ];
 
-            var q1 = surveyForm.q1.value;
-            var q2 = surveyForm.q2.value;
-            var q3 = surveyForm.q3.value;
-            var q4 = surveyForm.q4.value;
-            var q5 = surveyForm.q5.value;
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
 
-            if (!q1 || !q2 || !q3 || !q4 || !q5) {
-                alert("Por favor, responde todas las preguntas.");
+            const user = users.find(u => u.username === username && u.password === password);
+
+            if (user) {
+                localStorage.setItem('loggedInUser', username);
+                document.getElementById('login').classList.remove('active');
+                document.getElementById('question1').classList.add('active');
+                document.getElementById('survey').style.display = 'block';
+                updateProgress(1);
+            } else {
+                alert('Usuario o contraseña incorrectos.');
+            }
+        }
+
+        function nextQuestion(questionNumber) {
+            var questionDiv = document.getElementById('question' + questionNumber);
+            var nextQuestionDiv = document.getElementById('question' + (questionNumber + 1));
+            var selectedOption = document.querySelector('input[name="q' + questionNumber + '"]:checked');
+
+            if (!selectedOption) {
+                alert("Por favor, selecciona una opción.");
                 return;
             }
 
-            resultQ1.innerHTML = "1. ¿Cuál es tu color favorito? " + q1;
-            resultQ2.innerHTML = "2. ¿Cuál es tu comida favorita? " + q2;
-            resultQ3.innerHTML = "3. ¿Cuál es tu estación del año preferida? " + q3;
-            resultQ4.innerHTML = "4. ¿Cuál es tu animal favorito? " + q4;
-            resultQ5.innerHTML = "5. ¿Cuál es tu deporte favorito? " + q5;
+            localStorage.setItem('q' + questionNumber, selectedOption.value);
 
-            resultsDiv.style.display = 'block';
+            questionDiv.classList.remove('active');
+            if (nextQuestionDiv) {
+                nextQuestionDiv.classList.add('active');
+                updateProgress(questionNumber + 1);
+            } else {
+                showResults();
+            }
+        }
+
+        function previousQuestion(questionNumber) {
+            var questionDiv = document.getElementById('question' + questionNumber);
+            var prevQuestionDiv = document.getElementById('question' + (questionNumber - 1));
+
+            questionDiv.classList.remove('active');
+            if (prevQuestionDiv) {
+                prevQuestionDiv.classList.add('active');
+                updateProgress(questionNumber - 1);
+            }
+        }
+
+        function updateProgress(current) {
+            document.getElementById('currentQuestion').innerText = current;
+        }
+
+        function showResults() {
+            var resultsDiv = document.getElementById('results');
+            resultsDiv.classList.add('active');
+
+            document.getElementById('resultQ1').innerText = "1. ¿Cuál es tu color favorito? " + localStorage.getItem('q1');
+            document.getElementById('resultQ2').innerText = "2. ¿Cuál es tu comida favorita? " + localStorage.getItem('q2');
+            document.getElementById('resultQ3').innerText = "3. ¿Cuál es tu estación del año preferida? " + localStorage.getItem('q3');
+            document.getElementById('resultQ4').innerText = "4. ¿Cuál es tu animal favorito? " + localStorage.getItem('q4');
+            document.getElementById('resultQ5').innerText = "5. ¿Cuál es tu deporte favorito? " + localStorage.getItem('q5');
+        }
+
+        function saveResults() {
+            const username = localStorage.getItem('loggedInUser');
+            const results = {
+                q1: localStorage.getItem('q1'),
+                q2: localStorage.getItem('q2'),
+                q3: localStorage.getItem('q3'),
+                q4: localStorage.getItem('q4'),
+                q5: localStorage.getItem('q5')
+            };
+            localStorage.setItem(username + '_surveyResults', JSON.stringify(results));
+            alert('Resultados guardados.');
+        }
+
+        function logout() {
+            localStorage.removeItem('loggedInUser');
+            document.getElementById('results').classList.remove('active');
+            document.getElementById('login').classList.add('active');
+            document.getElementById('survey').style.display = 'none';
+        }
+
+        function finishSurvey() {
+            saveResults();
+            logout();
+        }
+
+        function showUsers() {
+            const userListDiv = document.getElementById('userList');
+            userListDiv.innerHTML = '';
+            users.forEach(user => {
+                const results = localStorage.getItem(user.username + '_surveyResults');
+                if (results) {
+                    const parsedResults = JSON.parse(results);
+                    userListDiv.innerHTML += `
+                        <div>
+                            <h3>${user.username}</h3>
+                            <p>1. ¿Cuál es tu color favorito? ${parsedResults.q1}</p>
+                            <p>2. ¿Cuál es tu comida favorita? ${parsedResults.q2}</p>
+                            <p>3. ¿Cuál es tu estación del año preferida? ${parsedResults.q3}</p>
+                            <p>4. ¿Cuál es tu animal favorito? ${parsedResults.q4}</p>
+                            <p>5. ¿Cuál es tu deporte favorito? ${parsedResults.q5}</p>
+                        </div>
+                    `;
+                }
+            });
+            document.getElementById('login').classList.remove('active');
+            document.getElementById('users').classList.add('active');
+        }
+
+        function backToLogin() {
+            document.getElementById('users').classList.remove('active');
+            document.getElementById('login').classList.add('active');
         }
     </script>
 </body>
