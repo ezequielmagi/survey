@@ -18,10 +18,27 @@
         .navigation {
             margin-top: 20px;
         }
+        .progress {
+            margin-bottom: 20px;
+        }
+        .progress span {
+            font-weight: bold;
+        }
+        .controls {
+            display: flex;
+            justify-content: space-between;
+        }
+        button {
+            padding: 10px 20px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <h1>Encuesta</h1>
+    <div class="progress">
+        Pregunta <span id="currentQuestion">1</span> de 5
+    </div>
     
     <div id="question1" class="question active">
         <label>1. ¿Cuál es tu color favorito?</label><br>
@@ -29,7 +46,9 @@
         <input type="radio" name="q1" value="Azul"> Azul<br>
         <input type="radio" name="q1" value="Verde"> Verde<br>
         <input type="radio" name="q1" value="Amarillo"> Amarillo<br>
-        <button onclick="nextQuestion(1)">Siguiente</button>
+        <div class="controls">
+            <button onclick="nextQuestion(1)">Siguiente</button>
+        </div>
     </div>
     
     <div id="question2" class="question">
@@ -38,7 +57,10 @@
         <input type="radio" name="q2" value="Hamburguesa"> Hamburguesa<br>
         <input type="radio" name="q2" value="Sushi"> Sushi<br>
         <input type="radio" name="q2" value="Pasta"> Pasta<br>
-        <button onclick="nextQuestion(2)">Siguiente</button>
+        <div class="controls">
+            <button onclick="previousQuestion(2)">Anterior</button>
+            <button onclick="nextQuestion(2)">Siguiente</button>
+        </div>
     </div>
     
     <div id="question3" class="question">
@@ -47,7 +69,10 @@
         <input type="radio" name="q3" value="Verano"> Verano<br>
         <input type="radio" name="q3" value="Otoño"> Otoño<br>
         <input type="radio" name="q3" value="Invierno"> Invierno<br>
-        <button onclick="nextQuestion(3)">Siguiente</button>
+        <div class="controls">
+            <button onclick="previousQuestion(3)">Anterior</button>
+            <button onclick="nextQuestion(3)">Siguiente</button>
+        </div>
     </div>
     
     <div id="question4" class="question">
@@ -56,7 +81,10 @@
         <input type="radio" name="q4" value="Gato"> Gato<br>
         <input type="radio" name="q4" value="Pájaro"> Pájaro<br>
         <input type="radio" name="q4" value="Pez"> Pez<br>
-        <button onclick="nextQuestion(4)">Siguiente</button>
+        <div class="controls">
+            <button onclick="previousQuestion(4)">Anterior</button>
+            <button onclick="nextQuestion(4)">Siguiente</button>
+        </div>
     </div>
     
     <div id="question5" class="question">
@@ -65,7 +93,10 @@
         <input type="radio" name="q5" value="Baloncesto"> Baloncesto<br>
         <input type="radio" name="q5" value="Tenis"> Tenis<br>
         <input type="radio" name="q5" value="Natación"> Natación<br>
-        <button onclick="nextQuestion(5)">Finalizar</button>
+        <div class="controls">
+            <button onclick="previousQuestion(5)">Anterior</button>
+            <button onclick="nextQuestion(5)">Finalizar</button>
+        </div>
     </div>
     
     <div id="results" class="result">
@@ -75,6 +106,7 @@
         <p id="resultQ3"></p>
         <p id="resultQ4"></p>
         <p id="resultQ5"></p>
+        <button onclick="resetSurvey()">Reiniciar</button>
     </div>
 
     <script>
@@ -93,9 +125,25 @@
             questionDiv.classList.remove('active');
             if (nextQuestionDiv) {
                 nextQuestionDiv.classList.add('active');
+                updateProgress(questionNumber + 1);
             } else {
                 showResults();
             }
+        }
+
+        function previousQuestion(questionNumber) {
+            var questionDiv = document.getElementById('question' + questionNumber);
+            var prevQuestionDiv = document.getElementById('question' + (questionNumber - 1));
+
+            questionDiv.classList.remove('active');
+            if (prevQuestionDiv) {
+                prevQuestionDiv.classList.add('active');
+                updateProgress(questionNumber - 1);
+            }
+        }
+
+        function updateProgress(current) {
+            document.getElementById('currentQuestion').innerText = current;
         }
 
         function showResults() {
@@ -107,6 +155,13 @@
             document.getElementById('resultQ3').innerText = "3. ¿Cuál es tu estación del año preferida? " + localStorage.getItem('q3');
             document.getElementById('resultQ4').innerText = "4. ¿Cuál es tu animal favorito? " + localStorage.getItem('q4');
             document.getElementById('resultQ5').innerText = "5. ¿Cuál es tu deporte favorito? " + localStorage.getItem('q5');
+        }
+
+        function resetSurvey() {
+            localStorage.clear();
+            document.getElementById('results').classList.remove('active');
+            document.getElementById('question1').classList.add('active');
+            updateProgress(1);
         }
     </script>
 </body>
