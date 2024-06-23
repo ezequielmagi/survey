@@ -9,10 +9,10 @@
             font-family: Arial, sans-serif;
             margin: 20px;
         }
-        .login, .question, .result, .users {
+        .login, .question, .summary, .result, .users {
             display: none;
         }
-        .login.active, .question.active, .result.active, .users.active {
+        .login.active, .question.active, .summary.active, .result.active, .users.active {
             display: block;
         }
         .progress {
@@ -104,20 +104,31 @@
             <input type="radio" name="q5" value="Natación"> Natación<br>
             <div class="controls">
                 <button onclick="previousQuestion(5)">Anterior</button>
-                <button onclick="finishSurvey()">Finalizar</button>
+                <button onclick="saveLastAnswerAndShowSummary()">Revisar Respuestas</button>
             </div>
         </div>
-        
-        <div id="results" class="result">
-            <h2>Resultados de la encuesta</h2>
-            <p id="resultQ1"></p>
-            <p id="resultQ2"></p>
-            <p id="resultQ3"></p>
-            <p id="resultQ4"></p>
-            <p id="resultQ5"></p>
-            <button onclick="saveResults()">Guardar Resultados</button>
-            <button onclick="logout()">Desloguear</button>
-        </div>
+    </div>
+
+    <div id="summary" class="summary">
+        <h2>Resumen de tus respuestas</h2>
+        <p id="summaryQ1"></p>
+        <p id="summaryQ2"></p>
+        <p id="summaryQ3"></p>
+        <p id="summaryQ4"></p>
+        <p id="summaryQ5"></p>
+        <button onclick="finishSurvey()">Confirmar y Finalizar</button>
+        <button onclick="backToSurvey()">Volver a la Encuesta</button>
+    </div>
+
+    <div id="results" class="result">
+        <h2>Resultados de la encuesta</h2>
+        <p id="resultQ1"></p>
+        <p id="resultQ2"></p>
+        <p id="resultQ3"></p>
+        <p id="resultQ4"></p>
+        <p id="resultQ5"></p>
+        <button onclick="saveResults()">Guardar Resultados</button>
+        <button onclick="logout()">Desloguear</button>
     </div>
 
     <div id="users" class="users">
@@ -173,7 +184,7 @@
                 nextQuestionDiv.classList.add('active');
                 updateProgress(questionNumber + 1);
             } else {
-                showResults();
+                showSummary();
             }
         }
 
@@ -192,9 +203,41 @@
             document.getElementById('currentQuestion').innerText = current;
         }
 
+        function showSummary() {
+            var summaryDiv = document.getElementById('summary');
+            summaryDiv.classList.add('active');
+            document.getElementById('survey').style.display = 'none';
+
+            document.getElementById('summaryQ1').innerText = "1. ¿Cuál es tu color favorito? " + localStorage.getItem('q1');
+            document.getElementById('summaryQ2').innerText = "2. ¿Cuál es tu comida favorita? " + localStorage.getItem('q2');
+            document.getElementById('summaryQ3').innerText = "3. ¿Cuál es tu estación del año preferida? " + localStorage.getItem('q3');
+            document.getElementById('summaryQ4').innerText = "4. ¿Cuál es tu animal favorito? " + localStorage.getItem('q4');
+            document.getElementById('summaryQ5').innerText = "5. ¿Cuál es tu deporte favorito? " + localStorage.getItem('q5');
+        }
+
+        function saveLastAnswerAndShowSummary() {
+            var selectedOption = document.querySelector('input[name="q5"]:checked');
+            if (!selectedOption) {
+                alert("Por favor, selecciona una opción.");
+                return;
+            }
+            localStorage.setItem('q5', selectedOption.value);
+            showSummary();
+        }
+
+        function backToSurvey() {
+            document.getElementById('summary').classList.remove('active');
+            document.getElementById('survey').style.display = 'block';
+        }
+
+        function finishSurvey() {
+            showResults();
+        }
+
         function showResults() {
             var resultsDiv = document.getElementById('results');
             resultsDiv.classList.add('active');
+            document.getElementById('summary').classList.remove('active');
 
             document.getElementById('resultQ1').innerText = "1. ¿Cuál es tu color favorito? " + localStorage.getItem('q1');
             document.getElementById('resultQ2').innerText = "2. ¿Cuál es tu comida favorita? " + localStorage.getItem('q2');
@@ -222,11 +265,6 @@
             document.getElementById('results').classList.remove('active');
             document.getElementById('login').classList.add('active');
             document.getElementById('survey').style.display = 'none';
-        }
-
-        function finishSurvey() {
-            saveResults();
-            logout();
         }
 
         function showUsers() {
