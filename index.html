@@ -141,11 +141,13 @@
         const users = [
             {
                 username: 'user1',
-                password: 'password1'
+                password: 'password1',
+                isAdmin: true
             },
             {
                 username: 'user2',
-                password: 'password2'
+                password: 'password2',
+                isAdmin: false
             }
         ];
 
@@ -157,6 +159,7 @@
 
             if (user) {
                 localStorage.setItem('loggedInUser', username);
+                localStorage.setItem('isAdmin', user.isAdmin);
                 clearSurveyResponses();
                 document.getElementById('login').classList.remove('active');
                 document.getElementById('question1').classList.add('active');
@@ -231,7 +234,13 @@
         }
 
         function finishSurvey() {
-            showResults();
+            const isAdmin = localStorage.getItem('isAdmin') === 'true';
+            if (isAdmin) {
+                showResults();
+            } else {
+                alert("Solo el administrador puede ver los resultados.");
+                logout();
+            }
         }
 
         function showResults() {
@@ -261,6 +270,7 @@
 
         function logout() {
             localStorage.removeItem('loggedInUser');
+            localStorage.removeItem('isAdmin');
             clearSurveyResponses();
             document.getElementById('results').classList.remove('active');
             document.getElementById('login').classList.add('active');
