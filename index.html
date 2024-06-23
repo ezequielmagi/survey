@@ -9,14 +9,11 @@
             font-family: Arial, sans-serif;
             margin: 20px;
         }
-        .question, .result {
+        .login, .question, .result {
             display: none;
         }
-        .question.active, .result.active {
+        .login.active, .question.active, .result.active {
             display: block;
-        }
-        .navigation {
-            margin-top: 20px;
         }
         .progress {
             margin-bottom: 20px;
@@ -27,6 +24,7 @@
         .controls {
             display: flex;
             justify-content: space-between;
+            margin-top: 20px;
         }
         button {
             padding: 10px 20px;
@@ -35,81 +33,119 @@
     </style>
 </head>
 <body>
-    <h1>Encuesta</h1>
-    <div class="progress">
-        Pregunta <span id="currentQuestion">1</span> de 5
+    <div id="login" class="login active">
+        <h1>Iniciar Sesión</h1>
+        <label for="username">Usuario:</label>
+        <input type="text" id="username" required><br>
+        <label for="password">Contraseña:</label>
+        <input type="password" id="password" required><br>
+        <button onclick="login()">Ingresar</button>
     </div>
     
-    <div id="question1" class="question active">
-        <label>1. ¿Cuál es tu color favorito?</label><br>
-        <input type="radio" name="q1" value="Rojo"> Rojo<br>
-        <input type="radio" name="q1" value="Azul"> Azul<br>
-        <input type="radio" name="q1" value="Verde"> Verde<br>
-        <input type="radio" name="q1" value="Amarillo"> Amarillo<br>
-        <div class="controls">
-            <button onclick="nextQuestion(1)">Siguiente</button>
+    <div id="survey">
+        <h1>Encuesta</h1>
+        <div class="progress">
+            Pregunta <span id="currentQuestion">1</span> de 5
         </div>
-    </div>
-    
-    <div id="question2" class="question">
-        <label>2. ¿Cuál es tu comida favorita?</label><br>
-        <input type="radio" name="q2" value="Pizza"> Pizza<br>
-        <input type="radio" name="q2" value="Hamburguesa"> Hamburguesa<br>
-        <input type="radio" name="q2" value="Sushi"> Sushi<br>
-        <input type="radio" name="q2" value="Pasta"> Pasta<br>
-        <div class="controls">
-            <button onclick="previousQuestion(2)">Anterior</button>
-            <button onclick="nextQuestion(2)">Siguiente</button>
+        
+        <div id="question1" class="question">
+            <label>1. ¿Cuál es tu color favorito?</label><br>
+            <input type="radio" name="q1" value="Rojo"> Rojo<br>
+            <input type="radio" name="q1" value="Azul"> Azul<br>
+            <input type="radio" name="q1" value="Verde"> Verde<br>
+            <input type="radio" name="q1" value="Amarillo"> Amarillo<br>
+            <div class="controls">
+                <button onclick="nextQuestion(1)">Siguiente</button>
+            </div>
         </div>
-    </div>
-    
-    <div id="question3" class="question">
-        <label>3. ¿Cuál es tu estación del año preferida?</label><br>
-        <input type="radio" name="q3" value="Primavera"> Primavera<br>
-        <input type="radio" name="q3" value="Verano"> Verano<br>
-        <input type="radio" name="q3" value="Otoño"> Otoño<br>
-        <input type="radio" name="q3" value="Invierno"> Invierno<br>
-        <div class="controls">
-            <button onclick="previousQuestion(3)">Anterior</button>
-            <button onclick="nextQuestion(3)">Siguiente</button>
+        
+        <div id="question2" class="question">
+            <label>2. ¿Cuál es tu comida favorita?</label><br>
+            <input type="radio" name="q2" value="Pizza"> Pizza<br>
+            <input type="radio" name="q2" value="Hamburguesa"> Hamburguesa<br>
+            <input type="radio" name="q2" value="Sushi"> Sushi<br>
+            <input type="radio" name="q2" value="Pasta"> Pasta<br>
+            <div class="controls">
+                <button onclick="previousQuestion(2)">Anterior</button>
+                <button onclick="nextQuestion(2)">Siguiente</button>
+            </div>
         </div>
-    </div>
-    
-    <div id="question4" class="question">
-        <label>4. ¿Cuál es tu animal favorito?</label><br>
-        <input type="radio" name="q4" value="Perro"> Perro<br>
-        <input type="radio" name="q4" value="Gato"> Gato<br>
-        <input type="radio" name="q4" value="Pájaro"> Pájaro<br>
-        <input type="radio" name="q4" value="Pez"> Pez<br>
-        <div class="controls">
-            <button onclick="previousQuestion(4)">Anterior</button>
-            <button onclick="nextQuestion(4)">Siguiente</button>
+        
+        <div id="question3" class="question">
+            <label>3. ¿Cuál es tu estación del año preferida?</label><br>
+            <input type="radio" name="q3" value="Primavera"> Primavera<br>
+            <input type="radio" name="q3" value="Verano"> Verano<br>
+            <input type="radio" name="q3" value="Otoño"> Otoño<br>
+            <input type="radio" name="q3" value="Invierno"> Invierno<br>
+            <div class="controls">
+                <button onclick="previousQuestion(3)">Anterior</button>
+                <button onclick="nextQuestion(3)">Siguiente</button>
+            </div>
         </div>
-    </div>
-    
-    <div id="question5" class="question">
-        <label>5. ¿Cuál es tu deporte favorito?</label><br>
-        <input type="radio" name="q5" value="Fútbol"> Fútbol<br>
-        <input type="radio" name="q5" value="Baloncesto"> Baloncesto<br>
-        <input type="radio" name="q5" value="Tenis"> Tenis<br>
-        <input type="radio" name="q5" value="Natación"> Natación<br>
-        <div class="controls">
-            <button onclick="previousQuestion(5)">Anterior</button>
-            <button onclick="nextQuestion(5)">Finalizar</button>
+        
+        <div id="question4" class="question">
+            <label>4. ¿Cuál es tu animal favorito?</label><br>
+            <input type="radio" name="q4" value="Perro"> Perro<br>
+            <input type="radio" name="q4" value="Gato"> Gato<br>
+            <input type="radio" name="q4" value="Pájaro"> Pájaro<br>
+            <input type="radio" name="q4" value="Pez"> Pez<br>
+            <div class="controls">
+                <button onclick="previousQuestion(4)">Anterior</button>
+                <button onclick="nextQuestion(4)">Siguiente</button>
+            </div>
         </div>
-    </div>
-    
-    <div id="results" class="result">
-        <h2>Resultados de la encuesta</h2>
-        <p id="resultQ1"></p>
-        <p id="resultQ2"></p>
-        <p id="resultQ3"></p>
-        <p id="resultQ4"></p>
-        <p id="resultQ5"></p>
-        <button onclick="resetSurvey()">Reiniciar</button>
+        
+        <div id="question5" class="question">
+            <label>5. ¿Cuál es tu deporte favorito?</label><br>
+            <input type="radio" name="q5" value="Fútbol"> Fútbol<br>
+            <input type="radio" name="q5" value="Baloncesto"> Baloncesto<br>
+            <input type="radio" name="q5" value="Tenis"> Tenis<br>
+            <input type="radio" name="q5" value="Natación"> Natación<br>
+            <div class="controls">
+                <button onclick="previousQuestion(5)">Anterior</button>
+                <button onclick="nextQuestion(5)">Finalizar</button>
+            </div>
+        </div>
+        
+        <div id="results" class="result">
+            <h2>Resultados de la encuesta</h2>
+            <p id="resultQ1"></p>
+            <p id="resultQ2"></p>
+            <p id="resultQ3"></p>
+            <p id="resultQ4"></p>
+            <p id="resultQ5"></p>
+            <button onclick="resetSurvey()">Reiniciar</button>
+        </div>
     </div>
 
     <script>
+        const users = [
+            {
+                username: 'user1',
+                password: 'password1'
+            },
+            {
+                username: 'user2',
+                password: 'password2'
+            }
+        ];
+
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            const user = users.find(u => u.username === username && u.password === password);
+
+            if (user) {
+                document.getElementById('login').classList.remove('active');
+                document.getElementById('question1').classList.add('active');
+                document.getElementById('survey').style.display = 'block';
+                updateProgress(1);
+            } else {
+                alert('Usuario o contraseña incorrectos.');
+            }
+        }
+
         function nextQuestion(questionNumber) {
             var questionDiv = document.getElementById('question' + questionNumber);
             var nextQuestionDiv = document.getElementById('question' + (questionNumber + 1));
