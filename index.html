@@ -146,6 +146,7 @@
 
             if (user) {
                 localStorage.setItem('loggedInUser', username);
+                clearSurveyResponses();
                 document.getElementById('login').classList.remove('active');
                 document.getElementById('question1').classList.add('active');
                 document.getElementById('survey').style.display = 'block';
@@ -217,6 +218,7 @@
 
         function logout() {
             localStorage.removeItem('loggedInUser');
+            clearSurveyResponses();
             document.getElementById('results').classList.remove('active');
             document.getElementById('login').classList.add('active');
             document.getElementById('survey').style.display = 'none';
@@ -253,6 +255,21 @@
         function backToLogin() {
             document.getElementById('users').classList.remove('active');
             document.getElementById('login').classList.add('active');
+        }
+
+        function clearSurveyResponses() {
+            localStorage.removeItem('q1');
+            localStorage.removeItem('q2');
+            localStorage.removeItem('q3');
+            localStorage.removeItem('q4');
+            localStorage.removeItem('q5');
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.checked = false;
+            });
+            document.querySelectorAll('.question').forEach(question => {
+                question.classList.remove('active');
+            });
+            document.getElementById('question1').classList.add('active');
         }
     </script>
 </body>
