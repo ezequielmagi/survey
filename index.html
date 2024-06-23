@@ -9,10 +9,10 @@
             font-family: Arial, sans-serif;
             margin: 20px;
         }
-        .login, .question, .result {
+        .login, .question, .result, .users {
             display: none;
         }
-        .login.active, .question.active, .result.active {
+        .login.active, .question.active, .result.active, .users.active {
             display: block;
         }
         .progress {
@@ -40,6 +40,7 @@
         <label for="password">Contraseña:</label>
         <input type="password" id="password" required><br>
         <button onclick="login()">Ingresar</button>
+        <button onclick="showUsers()">Ver Usuarios</button>
     </div>
     
     <div id="survey">
@@ -117,6 +118,12 @@
             <button onclick="saveResults()">Guardar Resultados</button>
             <button onclick="logout()">Desloguear</button>
         </div>
+    </div>
+
+    <div id="users" class="users">
+        <h1>Usuarios y Respuestas</h1>
+        <div id="userList"></div>
+        <button onclick="backToLogin()">Volver</button>
     </div>
 
     <script>
@@ -209,7 +216,7 @@
         }
 
         function logout() {
-            localStorage.clear();
+            localStorage.removeItem('loggedInUser');
             document.getElementById('results').classList.remove('active');
             document.getElementById('login').classList.add('active');
             document.getElementById('survey').style.display = 'none';
@@ -218,6 +225,34 @@
         function finishSurvey() {
             saveResults();
             logout();
+        }
+
+        function showUsers() {
+            const userListDiv = document.getElementById('userList');
+            userListDiv.innerHTML = '';
+            users.forEach(user => {
+                const results = localStorage.getItem(user.username + '_surveyResults');
+                if (results) {
+                    const parsedResults = JSON.parse(results);
+                    userListDiv.innerHTML += `
+                        <div>
+                            <h3>${user.username}</h3>
+                            <p>1. ¿Cuál es tu color favorito? ${parsedResults.q1}</p>
+                            <p>2. ¿Cuál es tu comida favorita? ${parsedResults.q2}</p>
+                            <p>3. ¿Cuál es tu estación del año preferida? ${parsedResults.q3}</p>
+                            <p>4. ¿Cuál es tu animal favorito? ${parsedResults.q4}</p>
+                            <p>5. ¿Cuál es tu deporte favorito? ${parsedResults.q5}</p>
+                        </div>
+                    `;
+                }
+            });
+            document.getElementById('login').classList.remove('active');
+            document.getElementById('users').classList.add('active');
+        }
+
+        function backToLogin() {
+            document.getElementById('users').classList.remove('active');
+            document.getElementById('login').classList.add('active');
         }
     </script>
 </body>
